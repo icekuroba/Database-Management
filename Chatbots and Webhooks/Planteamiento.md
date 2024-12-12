@@ -1,12 +1,3 @@
-### Tecnologías Utilizadas
-- **Node.js**: Servidor principal.
-- **Express**: Manejo de rutas y endpoints del webhook.
-- **SQLite**: Base de datos ligera para almacenar información de citas.
-- **WhatsApp Cloud API**: Comunicación con los usuarios a través de WhatsApp.
-- **ngrok**: Herramienta para exponer el servidor local a Internet durante el desarrollo.
-
----
-
 ## Estructura del Proyecto
 
 ```
