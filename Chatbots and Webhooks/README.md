@@ -20,7 +20,7 @@ El chatbot permite a los usuarios:
 - **WhatsApp Cloud API**: Comunicación con los usuarios a través de WhatsApp.
 
 ### Para exponer el servidor
-- **ngrok**: Herramienta para exponer el servidor local a Internet durante el desarrollo.
+- **Railway**: Herramienta para exponer el servidor local a Internet durante el desarrollo.
 - **No-IP (opcional)**: Asigna un subdominio gratuito a tu servidor si decides configurarlo como permanente desde casa.
 
 ### Para pruebas del chatbot
