@@ -1,24 +1,32 @@
 # Proyecto: Chatbot para Gestión de Citas con WhatsApp
 
 ## Descripción
-Este proyecto implementa un chatbot para la gestión de citas utilizando la **API de WhatsApp Cloud** y un servidor local desarrollado en **Node.js**. El chatbot permite a los usuarios:
+Este proyecto implementa un chatbot para la gestión de citas utilizando la **API de WhatsApp Cloud** y un servidor local desarrollado en **Node.js**. 
 
+El chatbot permite a los usuarios:
 - **Agendar citas** basándose en disponibilidad de horarios y personal.
 - **Consultar citas** previamente agendadas mediante un folio único.
 - **Reagendar o cancelar citas** con condiciones específicas.
 - **Acceder a preguntas frecuentes** sobre información del servicio (ubicación, precios, etc.).
+
 ---
 
-### Herramientas necesarias
+## Herramientas necesarias
+
+### Para el desarrollo
 - **Node.js**: Servidor principal.
 - **Express**: Manejo de rutas y endpoints del webhook.
 - **SQLite**: Base de datos ligera para almacenar información de citas.
 - **WhatsApp Cloud API**: Comunicación con los usuarios a través de WhatsApp.
+
+### Para exponer el servidor
 - **ngrok**: Herramienta para exponer el servidor local a Internet durante el desarrollo.
-- **No-IP (opcional)**: Para asignar un subdominio gratuito a tu servidor si decides configurarlo como permanente desde casa.
- ### Para pruebas del chatbot
-- **WhatsApp (App de prueba)**:Usa un número registrado en WhatsApp Cloud API para probar los mensajes.
+- **No-IP (opcional)**: Asigna un subdominio gratuito a tu servidor si decides configurarlo como permanente desde casa.
+
+### Para pruebas del chatbot
+- **WhatsApp (App de prueba)**: Usa un número registrado en WhatsApp Cloud API para probar los mensajes.
 - **Postman (opcional)**: Para simular llamadas a la API y probar las rutas del servidor.
+
 ---
 
 ## Características Principales
@@ -35,5 +43,12 @@ Este proyecto implementa un chatbot para la gestión de citas utilizando la **AP
    - Los usuarios pueden modificar o cancelar sus citas con un día de anticipación.
 
 4. **Preguntas frecuentes**:
-   - Respuestas predefinidas a preguntas comunes como "¿Dónde estamos ubicados?" o "¿Cuáles son los precios del servicio?".
+   - Respuestas predefinidas a preguntas comunes como:
+     - "¿Dónde estamos ubicados?"
+     - "¿Cuáles son los precios del servicio?"
 
+---
+
+### Notas adicionales
+- Este proyecto está diseñado para ser **completamente gratuito** y utiliza herramientas accesibles para todos los desarrolladores.
+- Se recomienda implementar buenas prácticas de programación y manejo de datos para garantizar la escalabilidad del chatbot.
