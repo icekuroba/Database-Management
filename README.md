@@ -1,4 +1,5 @@
 # Proyecto: Chatbot para Gestión de Citas con WhatsApp
+- Revisa tambien en este documento de drive: https://docs.google.com/document/d/1YGCP4cNDfUpnH5E07NcwRjhLl78VQ4Q_/edit
 
 ## Descripción
 Este proyecto implementa un chatbot para la gestión de citas utilizando la **API de WhatsApp Cloud** y un servidor local desarrollado en **Node.js**. 
