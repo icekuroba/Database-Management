@@ -12,6 +12,11 @@ app.use(bodyParser.json());
 app.get('/webhook', verifyWebhook);
 app.post('/webhook', handleWebhook);
 
+// Ruta para la raíz del servidor
+app.get('/', (req, res) => {
+    res.send('¡Servidor funcionando correctamente!');
+});
+
 // Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
