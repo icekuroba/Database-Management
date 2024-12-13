@@ -14,7 +14,7 @@ app.post('/webhook', handleWebhook);
 
 // Ruta para la raíz del servidor
 app.get('/', (req, res) => {
-    res.send('¡Servidor funcionando correctamente!');
+    res.send('¡Servidor funcionando correctamente!'); //Es una herramienta de diagnóstico visual 
 });
 
 // Iniciar el servidor
