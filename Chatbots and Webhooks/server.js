@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { verifyWebhook, handleWebhook } = require('./webhookHandler');
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(bodyParser.json());
