@@ -36,8 +36,3 @@ This project contains an **Office Scripts** code for **Excel Online** that scans
 - Product names and keywords in this repository are **anonymized**.  
 - No real or sensitive data is included.  
 - Works **only** with Excel Online and Office Scripts (not VBA).
-
----
-
-## 📷 Example output
-*(Include here one or two screenshots showing highlighted cells and the “Results” and “Summary” sheets.)*
