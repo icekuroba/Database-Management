@@ -33,7 +33,6 @@ Public Sub ProcessPoliciesWithQuinquennials()
     Const ROW_START As Long = 9
     Const SH_PROPOSAL As String = "RENEWAL_PROPOSAL"       ' was: PROPUESTA DE RENOVACIÓN
     Const CELL_QUINQ As String = "D15"
-    Const QUINQ_RANGE As String = "A:B"                    ' Col A: policy, Col B: quinquennial
 
     ' Optional dependent procedures (adjust or leave empty)
     Dim dependentProcs() As Variant
@@ -52,7 +51,7 @@ Public Sub ProcessPoliciesWithQuinquennials()
 
     ' ===== Unprotect (public repo: no real passwords) =====
     Dim passwords() As Variant
-    passwords = Array() ' keep empty publicly; load locally via InputBox/CONFIG if needed
+    passwords = Array() ' public: keep empty; load locally via InputBox/CONFIG if needed
 
     Dim ws As Worksheet
     For Each ws In wbQuote.Worksheets
@@ -102,15 +101,28 @@ Public Sub ProcessPoliciesWithQuinquennials()
             RunIfExists wbQuote, CStr(dependentProcs(i))
         Next i
 
-        ' Copy minimal sheets and save new workbook
-        Dim wbNew As Workbook
-        wbQuote.Sheets(Array(SH_PROPOSAL, "TEXTS", "ENDORSEMENTS")).Copy
-        Set wbNew = ActiveWorkbook
+        ' Copy available target sheets and save new workbook
+        Dim toCopy As Collection: Set toCopy = New Collection
+        If Not GetSheet(wbQuote, SH_PROPOSAL) Is Nothing Then toCopy.Add SH_PROPOSAL
+        If Not GetSheet(wbQuote, "TEXTS") Is Nothing Then toCopy.Add "TEXTS"
+        If Not GetSheet(wbQuote, "ENDORSEMENTS") Is Nothing Then toCopy.Add "ENDORSEMENTS"
 
-        Dim outName As String
-        outName = SanitizeFileName(policyName & "_" & Format(Now, "yyyymmdd_HHMMss") & ".xlsm")
-        wbNew.SaveAs Filename:=outPath & "\" & outName, FileFormat:=xlOpenXMLWorkbookMacroEnabled
-        wbNew.Close SaveChanges:=False
+        If toCopy.Count > 0 Then
+            Dim arr(): ReDim arr(0 To toCopy.Count - 1)
+            Dim k As Long
+            For k = 1 To toCopy.Count: arr(k - 1) = toCopy(k): Next
+            wbQuote.Sheets(arr).Copy
+
+            Dim wbNew As Workbook
+            Set wbNew = ActiveWorkbook
+
+            Dim outName As String
+            outName = SanitizeFileName(policyName & "_" & Format(Now, "yyyymmdd_HHMMss") & ".xlsm")
+            wbNew.SaveAs Filename:=outPath & "\" & outName, FileFormat:=xlOpenXMLWorkbookMacroEnabled
+            wbNew.Close SaveChanges:=False
+        Else
+            Debug.Print "No target sheets available to copy for policy: " & policyName
+        End If
 
 nextRow:
     Next r
