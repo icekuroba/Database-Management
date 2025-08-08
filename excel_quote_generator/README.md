@@ -16,3 +16,8 @@ It streamlines the process by executing calculations, populating a predefined pr
 - External quinquennium file (optional, for additional calculations).
 
 ## Project Structure
+📂 excel_quote_generator
+├── macros/ # VBA macro code
+├── templates/ # Proposal template files
+├── data/ # Source policy data
+├── README.md # Project documentation
