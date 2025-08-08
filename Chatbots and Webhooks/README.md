@@ -1,73 +1,77 @@
-# Proyecto: Chatbot para Gestión de Citas con WhatsApp
-- Revisa tambien en este documento de drive: https://docs.google.com/document/d/1YGCP4cNDfUpnH5E07NcwRjhLl78VQ4Q_/edit
+# Project: Appointment Management Chatbot with WhatsApp
+- Also see this reference document: [Google Drive Link](https://docs.google.com/document/d/1YGCP4cNDfUpnH5E07NcwRjhLl78VQ4Q_/edit)
 
-## Descripción
-Este proyecto implementa un chatbot para la gestión de citas utilizando la **API de WhatsApp Cloud** y un servidor local desarrollado en **Node.js**. 
+## Description
+This project implements a chatbot for appointment management using the **WhatsApp Cloud API** and a local server developed with **Node.js**.
 
-El chatbot permite a los usuarios:
-- **Agendar citas** basándose en disponibilidad de horarios y personal.
-- **Consultar citas** previamente agendadas mediante un folio único.
-- **Reagendar o cancelar citas** con condiciones específicas.
-- **Acceder a preguntas frecuentes** sobre información del servicio (ubicación, precios, etc.).
-
----
-
-## Herramientas necesarias
-
-### Para el desarrollo
-- **Node.js**: Servidor principal.
-- **Express**: Manejo de rutas y endpoints del webhook.
-- **SQLite**: Base de datos ligera para almacenar información de citas.
-- **WhatsApp Cloud API**: Comunicación con los usuarios a través de WhatsApp.
-
-### Para exponer el servidor
-- **Railway**: Herramienta para exponer el servidor local a Internet durante el desarrollo.
-- **No-IP (opcional)**: Asigna un subdominio gratuito a tu servidor si decides configurarlo como permanente desde casa.
-
-### Para pruebas del chatbot
-- **WhatsApp (App de prueba)**: Usa un número registrado en WhatsApp Cloud API para probar los mensajes.
-- **Postman (opcional)**: Para simular llamadas a la API y probar las rutas del servidor.
+The chatbot allows users to:
+- **Schedule appointments** based on staff and time slot availability.
+- **Check previously scheduled appointments** using a unique tracking ID.
+- **Reschedule or cancel appointments** under specific conditions.
+- **Access frequently asked questions (FAQs)** regarding the service (location, pricing, etc.).
 
 ---
 
-## Características Principales
+## Required Tools
 
-### Funcionalidades del Chatbot
-1. **Agendar citas**:
-   - Permite al usuario elegir un horario disponible y asignar personal automáticamente según disponibilidad.
-   - Genera un folio único como identificador de la cita.
+### For development
+- **Node.js** – Main server environment.
+- **Express** – Routing and webhook endpoint management.
+- **SQLite** – Lightweight database for storing appointment information.
+- **WhatsApp Cloud API** – Enables communication with users via WhatsApp.
 
-2. **Consultar citas**:
-   - Proporciona los detalles de la cita al usuario con base en el folio único.
+### For exposing the server
+- **Railway** – Tool to expose the local server to the Internet during development.
+- **No-IP** (optional) – Assigns a free subdomain to your server if you plan to run it permanently from home.
 
-3. **Reagendar o cancelar citas**:
-   - Los usuarios pueden modificar o cancelar sus citas con un día de anticipación.
-
-4. **Preguntas frecuentes**:
-   - Respuestas predefinidas a preguntas comunes como:
-     - "¿Dónde estamos ubicados?"
-     - "¿Cuáles son los precios del servicio?"
+### For chatbot testing
+- **WhatsApp (Test App)** – Use a phone number registered in the WhatsApp Cloud API for testing messages.
+- **Postman** (optional) – For simulating API calls and testing server routes.
 
 ---
-## Estructura del Proyecto
+
+## Key Features
+
+### Chatbot Functionalities
+1. **Schedule Appointments**:
+   - Allows the user to select an available time slot and automatically assigns staff based on availability.
+   - Generates a unique appointment ID.
+
+2. **Check Appointments**:
+   - Provides appointment details to the user using the unique appointment ID.
+
+3. **Reschedule or Cancel Appointments**:
+   - Users can modify or cancel their appointments at least one day in advance.
+
+4. **Frequently Asked Questions (FAQ)**:
+   - Predefined responses to common questions such as:
+     - "Where are you located?"
+     - "What are your service prices?"
+
+---
+
+## Project Structure
 
 ```
-├── server.js          # Archivo principal del servidor
-├── citas.db           # Base de datos SQLite
-├── package.json       # Dependencias del proyecto
-├── README.md          # Documentación del proyecto
-└── routes/            # (Opcional) Directorio para modularizar rutas del servidor
+├── server.js          # Main server file
+├── citas.db           # SQLite database
+├── package.json       # Project dependencies
+├── README.md          # Project documentation
+└── routes/            # (Optional) Directory for modular server routes
 ```
 
 ---
 
-## Requisitos Previos
-1. **Node.js** y **npm** instalados.
-2. **SQLite** configurado en el entorno local.
-3. Una cuenta de **Meta for Developers** para acceder a la API de WhatsApp Cloud.
-4. **ngrok** instalado para exponer el servidor durante el desarrollo.
+## Prerequisites
+1. **Node.js** and **npm** installed.
+2. **SQLite** configured in the local environment.
+3. A **Meta for Developers** account to access the WhatsApp Cloud API.
+4. **ngrok** installed to expose the server during development.
+
 ---
 
-### Notas adicionales
-- Este proyecto está diseñado para ser **completamente gratuito** y utiliza herramientas accesibles para todos los desarrolladores.
-- Se recomienda implementar buenas prácticas de programación y manejo de datos para garantizar la escalabilidad del chatbot.
+### Additional Notes
+- This project is designed to be **completely free** and uses tools accessible to all developers.
+- It is recommended to implement good programming practices and proper data handling to ensure chatbot scalability.
+
+
