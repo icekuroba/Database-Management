@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Script VerificadorSlip</title>
+  <title>Slip Verifier</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -43,75 +43,75 @@
 </head>
 <body>
 
-  <h1>📄 Script: VerificadorSlip</h1>
-  <p>Haz clic en el botón para copiar el script y luego pégalo en Excel Online.</p>
+  <h1>📄 Script: Slip Verifier</h1>
+<p>Click the button below to copy the script, then paste it into Excel Online.</p>
 
-  <button onclick="copiarScript()">📋 Copiar script</button>
+<button onclick="copiarScript()">📋 Copy Script</button>
 
   <!-- 🔒 Script oculto, pero accesible desde JS -->
   <textarea id="codigo" style="display:none;">
 function main(workbook: ExcelScript.Workbook) {
-  const inicio = new Date().getTime();
-  let totalCoincidencias = 0;
-  let conteoPalabras: { [clave: string]: number } = {};
-  let detallesCoincidencias: { palabra: string; hoja: string; celda: string }[] = [];
-  let modoMarcar = false;
-  let errorProtegidasMostrado = false;
+  const startTime = new Date().getTime();
+  let totalMatches = 0;
+  let keywordCount: { [key: string]: number } = {};
+  let matchDetails: { word: string; sheet: string; cell: string }[] = [];
+  let markOnlyMode = false;
+  let protectedCellsWarningShown = false;
 
-  // Verifica si se pueden crear hojas
+  // Check if new sheets can be created
   try {
     const testSheet = workbook.addWorksheet("TEMP_SCRIPT_CHECK");
     testSheet.delete();
   } catch (e) {
-    modoMarcar = true;
-    console.log("☃ No se pueden crear hojas, archivo macro o protegido");
+    markOnlyMode = true;
+    console.log("☃ Cannot create sheets - file is macro-enabled or protected");
   }
 
-  // Lista de productos (anonimizada)
-  const productos = [
-    { nombre: "Producto A", ramo: "CAT-01", palabras_clave: ["opción", "beneficio", "paquete"] },
-    { nombre: "Producto B", ramo: "CAT-02", palabras_clave: ["exceso", "adicional"] },
-    { nombre: "Servicio C", ramo: "CAT-03", palabras_clave: ["asistencia", "soporte", "atención"] },
-    { nombre: "Cobertura D", ramo: "CAT-04", palabras_clave: ["básico", "ampliado", "premium"] },
-    { nombre: "Plan E", ramo: "CAT-05", palabras_clave: ["titular", "dependiente", "familiar"] },
-    { nombre: "Complemento F", ramo: "CAT-06", palabras_clave: ["opcional", "extra"] },
-    { nombre: "Beneficio G", ramo: "CAT-07", palabras_clave: ["sepelio", "funerario", "asistencia funeraria"] } // ejemplo genérico
+  // Product list (anonymized)
+  const products = [
+    { name: "Product A", category: "CAT-01", keywords: ["option", "benefit", "package"] },
+    { name: "Product B", category: "CAT-02", keywords: ["excess", "additional"] },
+    { name: "Service C", category: "CAT-03", keywords: ["assistance", "support", "care"] },
+    { name: "Coverage D", category: "CAT-04", keywords: ["basic", "extended", "premium"] },
+    { name: "Plan E", category: "CAT-05", keywords: ["holder", "dependent", "family"] },
+    { name: "Addon F", category: "CAT-06", keywords: ["optional", "extra"] },
+    { name: "Benefit G", category: "CAT-07", keywords: ["burial", "funeral", "funeral assistance"] }
   ];
 
-  // Preprocesa claves en minúsculas
-  const productosProcesados = productos.map(p => ({
+  // Preprocess keywords to lowercase
+  const processedProducts = products.map(p => ({
     ...p,
-    palabras_clave: p.palabras_clave.map(k => k.toLowerCase())
+    keywords: p.keywords.map(k => k.toLowerCase())
   }));
 
-  // Crear hojas si es posible
+  // Create sheets if possible
   let resultSheet: ExcelScript.Worksheet | null = null;
-  let resumenSheet: ExcelScript.Worksheet | null = null;
+  let summarySheet: ExcelScript.Worksheet | null = null;
 
-  if (!modoMarcar) {
-    const existingResult = workbook.getWorksheet("Resultados");
+  if (!markOnlyMode) {
+    const existingResult = workbook.getWorksheet("Results");
     if (existingResult) existingResult.delete();
 
-    const existingResumen = workbook.getWorksheet("Resumen");
-    if (existingResumen) existingResumen.delete();
+    const existingSummary = workbook.getWorksheet("Summary");
+    if (existingSummary) existingSummary.delete();
 
     try {
-      resultSheet = workbook.addWorksheet("Resultados");
-      resultSheet.getRange("A1:E1").setValues([["Producto", "Ramo", "Palabra clave", "Hoja", "Celda"]]);
+      resultSheet = workbook.addWorksheet("Results");
+      resultSheet.getRange("A1:E1").setValues([["Product", "Category", "Keyword", "Sheet", "Cell"]]);
     } catch {}
 
     try {
-      resumenSheet = workbook.addWorksheet("Resumen");
+      summarySheet = workbook.addWorksheet("Summary");
     } catch {}
   }
 
-  const hojas = workbook.getWorksheets();
+  const sheets = workbook.getWorksheets();
   let rowIndex = 2;
 
-  for (let sheet of hojas) {
+  for (let sheet of sheets) {
     if (
-      sheet.getName() === "Resultados" ||
-      sheet.getName() === "Resumen" ||
+      sheet.getName() === "Results" ||
+      sheet.getName() === "Summary" ||
       sheet.getVisibility() !== ExcelScript.SheetVisibility.visible
     ) continue;
 
@@ -120,18 +120,18 @@ function main(workbook: ExcelScript.Workbook) {
 
     const values = range.getValues();
 
-    const filaOculta: boolean[] = [...Array(range.getRowCount()).keys()].map(i =>
+    const hiddenRows: boolean[] = [...Array(range.getRowCount()).keys()].map(i =>
       range.getCell(i, 0).getRow().getHidden()
     );
-    const columnaOculta: boolean[] = [...Array(range.getColumnCount()).keys()].map(j =>
+    const hiddenColumns: boolean[] = [...Array(range.getColumnCount()).keys()].map(j =>
       range.getCell(0, j).getColumn().getHidden()
     );
 
     for (let i = 0; i < values.length; i++) {
-      if (filaOculta[i]) continue;
+      if (hiddenRows[i]) continue;
 
       for (let j = 0; j < values[i].length; j++) {
-        if (columnaOculta[j]) continue;
+        if (hiddenColumns[j]) continue;
 
         const rawValue = values[i][j];
         const cellValue = String(rawValue).trim().toLowerCase();
@@ -139,38 +139,38 @@ function main(workbook: ExcelScript.Workbook) {
 
         const cell = range.getCell(i, j);
 
-        for (let producto of productosProcesados) {
-          for (let clave of producto.palabras_clave) {
-            if (cellValue.includes(clave)) {
-              totalCoincidencias++;
-              detallesCoincidencias.push({
-                palabra: clave,
-                hoja: sheet.getName(),
-                celda: cell.getAddress()
+        for (let product of processedProducts) {
+          for (let keyword of product.keywords) {
+            if (cellValue.includes(keyword)) {
+              totalMatches++;
+              matchDetails.push({
+                word: keyword,
+                sheet: sheet.getName(),
+                cell: cell.getAddress()
               });
-              conteoPalabras[clave] = (conteoPalabras[clave] || 0) + 1;
+              keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
 
-              if (!modoMarcar) {
+              if (!markOnlyMode) {
                 try {
-                  const textoOriginal = String(cell.getValue());
-                  const regex = new RegExp(`\\b(${clave})\\b`, "gi");
-                  const textoResaltado = textoOriginal.replace(regex, "☢$1☢");
-                  cell.setValue(textoResaltado);
+                  const originalText = String(cell.getValue());
+                  const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
+                  const highlightedText = originalText.replace(regex, "☢$1☢");
+                  cell.setValue(highlightedText);
                   try {
                     cell.getFormat().getFill().setColor("aqua");
                   } catch {}
                 } catch (e) {
-                  if (!errorProtegidasMostrado) {
-                    errorProtegidasMostrado = true;
-                    console.log("⚠ Algunas celdas están protegidas o no se pueden modificar.");
+                  if (!protectedCellsWarningShown) {
+                    protectedCellsWarningShown = true;
+                    console.log("⚠ Some cells are protected or cannot be modified.");
                   }
                 }
 
                 if (resultSheet) {
                   const address = cell.getAddressLocal();
-                  resultSheet.getCell(rowIndex - 1, 0).setValue(producto.nombre);
-                  resultSheet.getCell(rowIndex - 1, 1).setValue(producto.ramo);
-                  resultSheet.getCell(rowIndex - 1, 2).setValue(clave);
+                  resultSheet.getCell(rowIndex - 1, 0).setValue(product.name);
+                  resultSheet.getCell(rowIndex - 1, 1).setValue(product.category);
+                  resultSheet.getCell(rowIndex - 1, 2).setValue(keyword);
                   resultSheet.getCell(rowIndex - 1, 3).setValue(sheet.getName());
                   resultSheet.getCell(rowIndex - 1, 4).setValue(address);
                   rowIndex++;
@@ -183,42 +183,43 @@ function main(workbook: ExcelScript.Workbook) {
     }
   }
 
-  const fin = new Date().getTime();
-  const segundos = Math.round((fin - inicio) / 1000);
+  const endTime = new Date().getTime();
+  const seconds = Math.round((endTime - startTime) / 1000);
 
-  if (!modoMarcar && resumenSheet) {
-    resumenSheet.getCell(0, 0).setValue("✅ Script ejecutado correctamente");
-    resumenSheet.getCell(1, 0).setValue(`Duración: ${segundos} segundos`);
-    resumenSheet.getCell(2, 0).setValue(`Total de palabras encontradas: ${totalCoincidencias}`);
-    resumenSheet.getCell(3, 0).setValue("Conteo por palabra clave:");
+  if (!markOnlyMode && summarySheet) {
+    summarySheet.getCell(0, 0).setValue("✅ Script executed successfully");
+    summarySheet.getCell(1, 0).setValue(`Execution Time: ${seconds} seconds`);
+    summarySheet.getCell(2, 0).setValue(`Total Matches: ${totalMatches}`);
+    summarySheet.getCell(3, 0).setValue("Keyword Match Count:");
 
-    let filaResumen = 4;
-    for (const clave in conteoPalabras) {
-      resumenSheet.getCell(filaResumen, 0).setValue(`${clave}: ${conteoPalabras[clave]}`);
-      filaResumen++;
+    let summaryRow = 4;
+    for (const keyword in keywordCount) {
+      summarySheet.getCell(summaryRow, 0).setValue(`${keyword}: ${keywordCount[keyword]}`);
+      summaryRow++;
     }
   }
 
-  if (modoMarcar) {
-    console.log("Resumen (•ω•)");
-    console.log(`Duración: ${segundos} segundos`);
-    console.log(`Total: ${totalCoincidencias}`);
-    console.log("Conteo por palabra clave:");
-    console.log(JSON.stringify(conteoPalabras, null, 2));
-    console.log("Detalle de palabras:");
-    console.log(JSON.stringify(detallesCoincidencias, null, 2));
+  if (markOnlyMode) {
+    console.log("Summary (•ω•)");
+    console.log(`Execution Time: ${seconds} seconds`);
+    console.log(`Total Matches: ${totalMatches}`);
+    console.log("Keyword Match Count:");
+    console.log(JSON.stringify(keywordCount, null, 2));
+    console.log("Keyword Match Details:");
+    console.log(JSON.stringify(matchDetails, null, 2));
   }
 }
+
 
   </textarea>
 
   <div class="instrucciones">
     <h3>🧭 Instrucciones:</h3>
     <ol>
-      <li>Abre <strong>Excel Online</strong>.</li>
-      <li>Ve a la pestaña <strong>Automatizar</strong> &gt; <strong>Nuevo script</strong>.</li>
-      <li>Pega el script copiado (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li>
-      <li>Guárdalo como <strong>VerificadorSlip</strong>.</li>
+    <li>Open <strong>Excel Online</strong>.</li>
+    <li>Go to the <strong>Automate</strong> tab &gt; <strong>New Script</strong>.</li>
+    <li>Paste the copied script (<kbd>Ctrl</kbd> + <kbd>V</kbd>).</li>
+    <li>Save it as <strong>VerificadorSlip</strong>.</li>
     </ol>
   </div>
 
@@ -226,7 +227,7 @@ function main(workbook: ExcelScript.Workbook) {
     function copiarScript() {
       const texto = document.getElementById("codigo").value;
       navigator.clipboard.writeText(texto).then(() => {
-        alert("✅ Script copiado al portapapeles");
+        alert("✅Script copied to clipboard!");
       }).catch(err => {
         alert("❌ Error al copiar: " + err);
       });
@@ -235,4 +236,5 @@ function main(workbook: ExcelScript.Workbook) {
 
 </body>
 </html>
+
 
