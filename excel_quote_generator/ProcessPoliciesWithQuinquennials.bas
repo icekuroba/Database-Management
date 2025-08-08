@@ -35,7 +35,7 @@ Public Sub ProcesarPolizasConQuinquenios()
     Const CELDA_QUINQUENIO As String = "D15"
     Const RANGO_Q_LOOKUP As String = "A:B"      ' Col A: póliza, Col B: quinquenio
     Dim passwords() As Variant
-    passwords = Array("PoolMercer2021", "Pool2023Despachosr", "")
+    passwords = Array("passw4", "passw5", "")
 
     ' ===== Validaciones de hojas =====
     Dim shPol As Worksheet, shProp As Worksheet, shQ As Worksheet
