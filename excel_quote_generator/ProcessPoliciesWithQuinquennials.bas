@@ -1,9 +1,9 @@
 Option Explicit
 
-Public Sub ProcesarPolizasConQuinquenios()
-    On Error GoTo fallo
+Public Sub ProcessPoliciesWithQuinquennials()
+    On Error GoTo fail
 
-    ' ===== Rendimiento / entorno =====
+    ' ===== Performance =====
     Dim prevCalc As XlCalculation
     prevCalc = Application.Calculation
     Application.ScreenUpdating = False
@@ -11,113 +11,116 @@ Public Sub ProcesarPolizasConQuinquenios()
     Application.DisplayAlerts = False
     Application.Calculation = xlCalculationManual
 
-    ' ===== Selección de archivos =====
-    MsgBox "Selecciona el archivo del cotizador (.xlsm).", vbInformation
-    Dim rutaCotizador As Variant
-    rutaCotizador = Application.GetOpenFilename("Excel Macro-Enabled (*.xlsm), *.xlsm", , "Select cotizador file")
-    If rutaCotizador = False Then GoTo salida
+    ' ===== File selection =====
+    MsgBox "Select the quote workbook (.xlsm).", vbInformation
+    Dim pathQuote As Variant
+    pathQuote = Application.GetOpenFilename("Excel Macro-Enabled (*.xlsm), *.xlsm", , "Select quote file")
+    If pathQuote = False Then GoTo cleanup
 
-    MsgBox "Selecciona el archivo de quinquenios (.xlsx).", vbInformation
-    Dim rutaQuinquenios As Variant
-    rutaQuinquenios = Application.GetOpenFilename("Excel Workbook (*.xlsx), *.xlsx", , "Select quinquennials file")
-    If rutaQuinquenios = False Then GoTo salida
+    MsgBox "Select the quinquennials workbook (.xlsx).", vbInformation
+    Dim pathQuinq As Variant
+    pathQuinq = Application.GetOpenFilename("Excel Workbook (*.xlsx), *.xlsx", , "Select quinquennials file")
+    If pathQuinq = False Then GoTo cleanup
 
-    ' ===== Abrir libros =====
-    Dim wbCot As Workbook, wbQ As Workbook
-    Set wbCot = Workbooks.Open(CStr(rutaCotizador), ReadOnly:=False)
-    Set wbQ = Workbooks.Open(CStr(rutaQuinquenios), ReadOnly:=True)
+    ' ===== Open workbooks =====
+    Dim wbQuote As Workbook, wbQuinq As Workbook
+    Set wbQuote = Workbooks.Open(CStr(pathQuote), ReadOnly:=False)
+    Set wbQuinq = Workbooks.Open(CStr(pathQuinq), ReadOnly:=True)
 
-    ' ===== Constantes configurables =====
-    Const SH_POLIZARIO As String = "POLIZARIO"
-    Const COL_POLIZA As Long = 2                ' Columna B
-    Const FILA_INICIO As Long = 9
-    Const SH_PROPUESTA As String = "PROPUESTA DE RENOVACIÓN"
-    Const CELDA_QUINQUENIO As String = "D15"
-    Const RANGO_Q_LOOKUP As String = "A:B"      ' Col A: póliza, Col B: quinquenio
-    Dim passwords() As Variant
-    passwords = Array("passw4", "passw5", "")
+    ' ===== Configurable constants (generic names) =====
+    Const SH_POLICIES As String = "POLICIES"              ' was: POLIZARIO
+    Const COL_POLICY As Long = 2                           ' column B
+    Const ROW_START As Long = 9
+    Const SH_PROPOSAL As String = "RENEWAL_PROPOSAL"       ' was: PROPUESTA DE RENOVACIÓN
+    Const CELL_QUINQ As String = "D15"
+    Const QUINQ_RANGE As String = "A:B"                    ' Col A: policy, Col B: quinquennial
 
-    ' ===== Validaciones de hojas =====
-    Dim shPol As Worksheet, shProp As Worksheet, shQ As Worksheet
-    Set shPol = GetSheet(wbCot, SH_POLIZARIO)
-    Set shProp = GetSheet(wbCot, SH_PROPUESTA)
-    Set shQ = wbQ.Sheets(1) ' Ajustar si corresponde
+    ' Optional dependent procedures (adjust or leave empty)
+    Dim dependentProcs() As Variant
+    dependentProcs = Array("subgrupos", "Tarifas_enlace", "Tarifa_Modificaciones", "resumen")
+
+    ' ===== Sheet validation =====
+    Dim shPol As Worksheet, shProp As Worksheet, shQuinq As Worksheet
+    Set shPol = GetSheet(wbQuote, SH_POLICIES)
+    Set shProp = GetSheet(wbQuote, SH_PROPOSAL)
+    Set shQuinq = wbQuinq.Sheets(1) ' adjust if needed
 
     If shPol Is Nothing Or shProp Is Nothing Then
-        MsgBox "No se encontraron hojas requeridas en el cotizador.", vbCritical
-        GoTo salida
+        MsgBox "Required sheets not found in the quote workbook.", vbCritical
+        GoTo cleanup
     End If
 
-    ' ===== Desproteger hojas del cotizador (si aplica) =====
-    Dim sh As Worksheet
-    For Each sh In wbCot.Worksheets
-        If sh.ProtectContents Then
-            If Not TryUnprotect(sh, passwords) Then
-                MsgBox "No se pudo desproteger la hoja: " & sh.Name, vbCritical
-                GoTo salida
+    ' ===== Unprotect (public repo: no real passwords) =====
+    Dim passwords() As Variant
+    passwords = Array() ' keep empty publicly; load locally via InputBox/CONFIG if needed
+
+    Dim ws As Worksheet
+    For Each ws In wbQuote.Worksheets
+        If ws.ProtectContents Then
+            If Not TryUnprotect(ws, passwords) Then
+                MsgBox "A protected sheet could not be unprotected: " & ws.Name, vbExclamation
+                GoTo cleanup
             End If
         End If
-    Next sh
+    Next ws
 
-    ' ===== Carpeta de salida =====
-    Dim rutaSalida As String
-    rutaSalida = Environ$("USERPROFILE") & "\Documents\" & Replace(wbCot.Name, ".xlsm", "") & "_Processed"
-    EnsureFolder rutaSalida
+    ' ===== Output folder =====
+    Dim outPath As String
+    outPath = Environ$("USERPROFILE") & "\Documents\" & Replace(wbQuote.Name, ".xlsm", "") & "_Processed"
+    EnsureFolder outPath
 
-    ' ===== Preparar índice de quinquenios (Match + lectura) =====
+    ' ===== Build quinquennial index =====
     Dim lastQ As Long
-    lastQ = shQ.Cells(shQ.Rows.Count, 1).End(xlUp).Row
-    Dim rangoQ As Range
-    Set rangoQ = shQ.Range("A1").Resize(lastQ, 2)
+    lastQ = shQuinq.Cells(shQuinq.Rows.Count, 1).End(xlUp).Row
+    Dim rngQuinq As Range
+    Set rngQuinq = shQuinq.Range("A1").Resize(lastQ, 2)
 
-    ' ===== Recorrido de pólizas =====
-    Dim lastRow As Long, fila As Long
-    lastRow = shPol.Cells(shPol.Rows.Count, COL_POLIZA).End(xlUp).Row
+    ' ===== Iterate policies =====
+    Dim lastRow As Long, r As Long
+    lastRow = shPol.Cells(shPol.Rows.Count, COL_POLICY).End(xlUp).Row
 
-    For fila = FILA_INICIO To lastRow
-        Dim nombrePoliza As String
-        nombrePoliza = Trim(CStr(shPol.Cells(fila, COL_POLIZA).Value))
-        If Len(nombrePoliza) = 0 Then GoTo siguiente
+    For r = ROW_START To lastRow
+        Dim policyName As String
+        policyName = Trim(CStr(shPol.Cells(r, COL_POLICY).Value))
+        If Len(policyName) = 0 Then GoTo nextRow
 
-        ' Buscar posición con Match
+        ' Lookup position
         Dim pos As Variant
-        pos = Application.Match(nombrePoliza, rangoQ.Columns(1), 0)
+        pos = Application.Match(policyName, rngQuinq.Columns(1), 0)
 
         If Not IsError(pos) And Not IsEmpty(pos) Then
-            ' Leer quinquenio de la columna 2
-            Dim quinquenio As Variant
-            quinquenio = rangoQ.Cells(CLng(pos), 2).Value
-            shProp.Range(CELDA_QUINQUENIO).Value = quinquenio
+            Dim quinquennial As Variant
+            quinquennial = rngQuinq.Cells(CLng(pos), 2).Value
+            shProp.Range(CELL_QUINQ).Value = quinquennial
         Else
-            ' Puede ser informativo; no interrumpir el proceso por una no-coincidencia
-            Debug.Print "Quinquenio no encontrado para: " & nombrePoliza
+            Debug.Print "Quinquennial not found for policy: " & policyName
         End If
 
-        ' ===== Ejecutar macros dependientes (si existen) =====
-        RunIfExists wbCot, "subgrupos"
-        RunIfExists wbCot, "Tarifas_enlace"
-        RunIfExists wbCot, "Tarifa_Modificaciones"
-        RunIfExists wbCot, "resumen"
+        ' Run dependent procedures if available
+        Dim i As Long
+        For i = LBound(dependentProcs) To UBound(dependentProcs)
+            RunIfExists wbQuote, CStr(dependentProcs(i))
+        Next i
 
-        ' ===== Copiar hojas y guardar nuevo libro =====
-        Dim nuevo As Workbook
-        wbCot.Sheets(Array(SH_PROPUESTA, "Textos", "Endosos")).Copy
-        Set nuevo = ActiveWorkbook
+        ' Copy minimal sheets and save new workbook
+        Dim wbNew As Workbook
+        wbQuote.Sheets(Array(SH_PROPOSAL, "TEXTS", "ENDORSEMENTS")).Copy
+        Set wbNew = ActiveWorkbook
 
-        Dim nombreFinal As String
-        nombreFinal = nombrePoliza & "_" & Format(Now, "yyyymmdd_HHMMss") & ".xlsm"
-        nuevo.SaveAs Filename:=rutaSalida & "\" & nombreFinal, FileFormat:=xlOpenXMLWorkbookMacroEnabled
-        nuevo.Close SaveChanges:=False
+        Dim outName As String
+        outName = SanitizeFileName(policyName & "_" & Format(Now, "yyyymmdd_HHMMss") & ".xlsm")
+        wbNew.SaveAs Filename:=outPath & "\" & outName, FileFormat:=xlOpenXMLWorkbookMacroEnabled
+        wbNew.Close SaveChanges:=False
 
-siguiente:
-    Next fila
+nextRow:
+    Next r
 
-    MsgBox "Proceso completado.", vbInformation
+    MsgBox "Process completed.", vbInformation
 
-salida:
+cleanup:
     On Error Resume Next
-    If Not wbCot Is Nothing Then wbCot.Close SaveChanges:=False
-    If Not wbQ Is Nothing Then wbQ.Close SaveChanges:=False
+    If Not wbQuote Is Nothing Then wbQuote.Close SaveChanges:=False
+    If Not wbQuinq Is Nothing Then wbQuinq.Close SaveChanges:=False
     Application.DisplayAlerts = True
     Application.Calculation = prevCalc
     Application.EnableEvents = True
@@ -125,12 +128,12 @@ salida:
     On Error GoTo 0
     Exit Sub
 
-fallo:
+fail:
     MsgBox "Error: " & Err.Number & " - " & Err.Description, vbCritical
-    Resume salida
+    Resume cleanup
 End Sub
 
-' === Utilidades ===
+' === Utilities ===
 
 Private Function GetSheet(wb As Workbook, ByVal name As String) As Worksheet
     On Error Resume Next
@@ -168,3 +171,14 @@ Private Sub RunIfExists(wb As Workbook, procName As String)
     Err.Clear
     On Error GoTo 0
 End Sub
+
+Private Function SanitizeFileName(ByVal s As String) As String
+    ' replace invalid file name characters and trim length
+    Dim badChars As Variant: badChars = Array("\", "/", ":", "*", "?", """", "<", ">", "|")
+    Dim i As Long
+    For i = LBound(badChars) To UBound(badChars)
+        s = Replace$(s, CStr(badChars(i)), "_")
+    Next i
+    If Len(s) > 120 Then s = Left$(s, 120)
+    SanitizeFileName = s
+End Function
