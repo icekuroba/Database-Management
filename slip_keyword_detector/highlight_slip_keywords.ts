@@ -12,7 +12,7 @@ function main(workbook: ExcelScript.Workbook) {
     testSheet.delete();
   } catch (e) {
     modoMarcar = true;
-    console.log("⚠ No se pueden crear hojas, archivo macro o protegido");
+    console.log("☃ No se pueden crear hojas, archivo macro o protegido");
   }
 
   // Lista de productos (anonimizada)
@@ -102,7 +102,7 @@ function main(workbook: ExcelScript.Workbook) {
                 try {
                   const textoOriginal = String(cell.getValue());
                   const regex = new RegExp(`\\b(${clave})\\b`, "gi");
-                  const textoResaltado = textoOriginal.replace(regex, "🔶$1🔶");
+                  const textoResaltado = textoOriginal.replace(regex, "☢$1☢");
                   cell.setValue(textoResaltado);
                   try {
                     cell.getFormat().getFill().setColor("aqua");
@@ -138,7 +138,7 @@ function main(workbook: ExcelScript.Workbook) {
     resumenSheet.getCell(0, 0).setValue("✅ Script ejecutado correctamente");
     resumenSheet.getCell(1, 0).setValue(`Duración: ${segundos} segundos`);
     resumenSheet.getCell(2, 0).setValue(`Total de palabras encontradas: ${totalCoincidencias}`);
-    resumenSheet.getCell(3, 0).setValue("📊 Conteo por palabra clave:");
+    resumenSheet.getCell(3, 0).setValue("Conteo por palabra clave:");
 
     let filaResumen = 4;
     for (const clave in conteoPalabras) {
