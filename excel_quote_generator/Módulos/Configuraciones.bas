@@ -14,16 +14,16 @@ Public Sub Desbloquear(ByVal libroOrigen As Workbook)
     ruta = "https://comunidadunammx.sharepoint.com/:x:/r/sites/KUROBACORPORATION/Proyectos/Cotizador/Parametros.xlsx"
     'ruta = "C:\Users\SSD\Desktop\Corporativo\Cotizador\Parametros.xlsx"
 
-    'Abre libro de contraseñas
+    'Abre libro de contraseÃ±as
     Set libroContrasena = Workbooks.Open(ruta, UpdateLinks:=0, ReadOnly:=True)
     Set lista = libroContrasena.Sheets(2)
     ultimaFila = lista.Cells(lista.Rows.Count, "B").End(xlUp).Row
 
-    'Probar cada contraseña
+    'Probar cada contraseÃ±a
     For i = 1 To ultimaFila
         contr = Trim(CStr(lista.Cells(i, 2).Value))
         If contr <> "" Then
-            Debug.Print "Probando contraseña en fila" & i & ": " & contr
+            Debug.Print "Probando contraseÃ±a en fila" & i & ": " & contr
             On Error Resume Next
             libroOrigen.Unprotect Password:=contr
             'Desbloquear cada hoja
@@ -46,7 +46,7 @@ Public Sub Desbloquear(ByVal libroOrigen As Workbook)
 
     If Not desbloqueado Then
         Debug.Print "No se puede desbloquear el libro"
-        'MsgBox "No se puede desbloquear porque la contraseña no se encuentra", vbInformation
+        'MsgBox "No se puede desbloquear porque la contraseÃ±a no se encuentra", vbInformation
     End If
 End Sub
 Private Function EstaEnArray(valor As String, arr As Variant) As Boolean
@@ -94,7 +94,7 @@ Public Function rutaDocumentos() As String
     Else
         rutaDocumentos = up
     End If
-    Debug.Print "libroContraseña cargado: " & libroContrasena.name
+    Debug.Print "libroContraseÃ±a cargado: " & libroContrasena.name
 End Function
 '===============================================================================================================
 '                          Carga de arrays
@@ -144,7 +144,7 @@ Public Function LeerPoliza(ws As Worksheet, Optional col As Long = 2, Optional f
     Debug.Print "Total de polizas encontradas: " & nPolizas
 End Function
 '===============================================================================================================
-'                  Funciones aún más auxiliares
+'                  Funciones aÃºn mÃ¡s auxiliares
 '===============================================================================================================
 Public Function ExisteHoja(wsName As String, wb As Workbook) As Boolean
     Dim ws As Worksheet
