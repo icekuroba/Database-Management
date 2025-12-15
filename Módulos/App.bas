@@ -3,9 +3,9 @@ Public Const nombreHoja As String = "POLIZARIO"
 Public Const propuesta As String = "PROPUESTA"
 Public Const modificaciones As String = "MODIFICACIONES"
 ' Arrays globales
-Public polizas() As String          ' nombre de cada póliza
-Public filas() As Long              ' filas donde está cada póliza
-Public nPolizas As Long             ' cantidad total de pólizas
+Public polizas() As String          ' nombre de cada pÃ³liza
+Public filas() As Long              ' filas donde estÃ¡ cada pÃ³liza
+Public nPolizas As Long             ' cantidad total de pÃ³lizas
 Option Explicit
 Sub MostrarCotizador()
     frmCotizador.Show
@@ -31,7 +31,7 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
     ' Quinquenios
     Dim libroQ As Workbook, hojaQ As Worksheet, archivoQ As String, rutaQ As String, archivoRutaQ As Variant
     
-    ' Parámetros
+    ' ParÃ¡metros
     Dim lista As Worksheet, ultimaFila As Long, j As Long
     Dim agente As String, partes() As String, partesQ() As String
     Dim y2 As String, y4 As String, falla As String, nomQ As String
@@ -39,7 +39,7 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
     Dim nombreQuinquenios As String
     On Error GoTo msj
     '-----------------------------------------------
-    ' 1) Abre los archivos y ordena las pólizas por quinquenios
+    ' 1) Abre los archivos y ordena las pÃ³lizas por quinquenios
     '-----------------------------------------------
     archivoRuta = rutaCotizador
     archivoRutaQ = rutaQuinquenios
@@ -58,7 +58,7 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
         .Header = xlYes
         .Apply
     End With
-    Debug.Print "El archivo de quinquenios ya está ordenado"
+    Debug.Print "El archivo de quinquenios ya estÃ¡ ordenado"
 
     '-----------------------------------------------
     ' 2) Desbloquear libro y limpiar datos
@@ -71,9 +71,9 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
 
     If Not limpiarLibro Is Nothing Then
         limpiarLibro.Range("E37:F50").ClearContents '("E95:F112").ClearContents
-        Debug.Print "Censo limpiado con éxito"
+        Debug.Print "Censo limpiado con Ã©xito"
     Else
-        Debug.Print "No se limpió censo porque no se encontró la hoja de polizario"
+        Debug.Print "No se limpiÃ³ censo porque no se encontrÃ³ la hoja de polizario"
     End If
 
     libroOrigen.Save
@@ -120,7 +120,7 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
     End If
     If falla = "" And InStr(1, tipoCotizador, "A", vbTextCompare) > 0 Then
         If y2 <> "" And (InStr(1, nomQ, y2) = 0 And InStr(1, nomQ, y4) = 0) Then
-            falla = "Año distinto (cotizador: " & y4 & ")"
+            falla = "AÃ±o distinto (cotizador: " & y4 & ")"
         End If
     End If
     If Len(falla) > 0 Then
