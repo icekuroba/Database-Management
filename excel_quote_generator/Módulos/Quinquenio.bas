@@ -1,6 +1,6 @@
 Attribute VB_Name = "Quinquenio"
 '================================================================================================
-'            Función para el libro de Quinquenios (ya abierto)
+'            FunciÃ³n para el libro de Quinquenios (ya abierto)
 '================================================================================================
 Public Const propuesta As String = "PROPUESTA"
 Public Const datos As String = "DATOS"
@@ -32,7 +32,7 @@ Public Sub Quinquenios(libroCopia As Workbook, archivoQ As String)
     End If
     datosQ = hojaQ.Range("A2:G" & ultimaFila).Value
 
-    ' === 2) Filtrar solo la póliza actual ===
+    ' === 2) Filtrar solo la pÃ³liza actual ===
     numPolizaActual = numPolizaGlobal
     totalFilas = UBound(datosQ, 1)
     totalCols = UBound(datosQ, 2)
@@ -47,7 +47,7 @@ Public Sub Quinquenios(libroCopia As Workbook, archivoQ As String)
     Next i
 
     If filaOut = 0 Then
-        Debug.Print "No hay registros en quinquenios para la póliza ¯\_(¬_¬)_/¯ " & numPolizaActual
+        Debug.Print "No hay registros en quinquenios para la pÃ³liza Â¯\_(Â¬_Â¬)_/Â¯ " & numPolizaActual
         GoTo Salir
     End If
 
@@ -63,7 +63,7 @@ Public Sub Quinquenios(libroCopia As Workbook, archivoQ As String)
             Next j
         End If
     Next i
-    Debug.Print filaOut; " registros encontrados en la póliza " & numPolizaActual
+    Debug.Print filaOut; " registros encontrados en la pÃ³liza " & numPolizaActual
 
     ' === 4) Contar subgrupos ===
     Set grupos = CreateObject("Scripting.Dictionary")
@@ -72,7 +72,7 @@ Public Sub Quinquenios(libroCopia As Workbook, archivoQ As String)
         If Not grupos.exists(clave) Then
             Set grupos(clave) = New Collection
         End If
-        grupos(clave).Add i ' <- Guarda el índice del arreglo, no el valor (CORRECCIÓN CLAVE)
+        grupos(clave).Add i ' <- Guarda el Ã­ndice del arreglo, no el valor (CORRECCIÃ“N CLAVE)
     Next i
     Debug.Print "Subgrupos detectados: "; grupos.Count
 
@@ -83,7 +83,7 @@ Public Sub Quinquenios(libroCopia As Workbook, archivoQ As String)
 
     For Each subg In llaves
         pos = pos + 1
-        Debug.Print "Llenando subgrupo " & subg & " en posición " & pos
+        Debug.Print "Llenando subgrupo " & subg & " en posiciÃ³n " & pos
         Call LlenarCenso(libroCopia, hojaPropuesta, pos, listaFiltrada, grupos(subg))
     Next subg
 
@@ -96,7 +96,7 @@ End Sub
 
 
 '************************************************************************************************************
-'                 Subfunciones de la función de quinquenios
+'                 Subfunciones de la funciÃ³n de quinquenios
 '************************************************************************************************************
 Private Sub SortVariantArray(arr As Variant)
     Dim i As Long, j As Long, tmp As Variant
@@ -112,7 +112,7 @@ End Sub
 
 
 '******************************************************************************************************************
-'                           Llenar censo en propuesta (versión sin error)
+'                           Llenar censo en propuesta (versiÃ³n sin error)
 '******************************************************************************************************************
 Private Sub LlenarCenso(libroCopia As Workbook, hojaPropuesta As Worksheet, posicion As Long, datosQ As Variant, filas As Collection)
     Dim hojaDatos As Worksheet, baseCol As Long, tipoArchivo As String, llave As String
@@ -121,7 +121,7 @@ Private Sub LlenarCenso(libroCopia As Workbook, hojaPropuesta As Worksheet, posi
     Dim sexo As String, edad As Long, cantidad As Long
     Dim incremento As Double, filaBase As Long, colOrigen As Long, colIncremento As Long, resultado As Long
 
-    ' === 1. Determinar columna base según el subgrupo ===
+    ' === 1. Determinar columna base segÃºn el subgrupo ===
     baseCol = 5 + (8 * (posicion - 1)) ' E = 5
     Debug.Print "Subgrupo:"; posicion; " BaseCol:"; baseCol
 
@@ -146,8 +146,8 @@ Private Sub LlenarCenso(libroCopia As Workbook, hojaPropuesta As Worksheet, posi
 
     ' === 4. Llenar los datos del censo ===
     For i = 1 To filas.Count
-        index = filas(i) ' <- ahora es un índice válido (ej. 1, 2, 3)
-        datoBruto = UCase$(Replace(CStr(datosQ(index, 4)), " ", "")) ' Col D = código tipo
+        index = filas(i) ' <- ahora es un Ã­ndice vÃ¡lido (ej. 1, 2, 3)
+        datoBruto = UCase$(Replace(CStr(datosQ(index, 4)), " ", "")) ' Col D = cÃ³digo tipo
         sexo = Right$(datoBruto, 1)
         edad = CLng(Val(datosQ(index, 5))) ' Col E = edad
         cantidad = CLng(Val(datosQ(index, 7))) ' Col G = cantidad
@@ -167,7 +167,7 @@ Private Sub LlenarCenso(libroCopia As Workbook, hojaPropuesta As Worksheet, posi
 
     Debug.Print "Censo completado para subgrupo:"; posicion
 
-    ' === 5. Colocar incremento máximo (si aplica) ===
+    ' === 5. Colocar incremento mÃ¡ximo (si aplica) ===
     Set hojaDatos = libroCopia.Sheets(datos)
     tipoArchivo = UCase$(libroCopia.name)
 
@@ -184,7 +184,7 @@ Private Sub LlenarCenso(libroCopia As Workbook, hojaPropuesta As Worksheet, posi
             hojaPropuesta.Cells(filaBase, colIncremento + resultado).NumberFormat = "0.00%"
             Debug.Print "Incremento max asignado (" & numPolizaGlobal & "): " & incremento
         Else
-            Debug.Print "Incremento no numérico en subgrupo"; posicion
+            Debug.Print "Incremento no numÃ©rico en subgrupo"; posicion
         End If
     End If
 End Sub
