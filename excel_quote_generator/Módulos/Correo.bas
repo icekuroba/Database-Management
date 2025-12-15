@@ -1,7 +1,7 @@
 Attribute VB_Name = "Correo"
 '===========================================
-'  Módulo: Envío automático de pólizas por correo
-'  Versión robusta con control de índices y depuración
+'  MÃ³dulo: EnvÃ­o automÃ¡tico de pÃ³lizas por correo
+'  VersiÃ³n robusta con control de Ã­ndices y depuraciÃ³n
 '===========================================
 
 Public Const correos As String = "TablaCorreos"
@@ -16,11 +16,11 @@ Public Sub IniciarRegistros(Optional dummy As Boolean)
     ReDim polizasProcesadas(1 To 1)
     ReDim rutasProcesadas(1 To 1)
     contadorPolizas = 0
-    Debug.Print "Registro de pólizas iniciado"
+    Debug.Print "Registro de pÃ³lizas iniciado"
 End Sub
 
 '-------------------------------------------
-' Registra las pólizas procesadas
+' Registra las pÃ³lizas procesadas
 '-------------------------------------------
 Public Sub RegistrarPolizas(ByVal numPoliza As String, ByVal rutaArchivo As String)
     If Len(numPoliza) = 0 Or Len(rutaArchivo) = 0 Then Exit Sub
@@ -36,7 +36,7 @@ Public Sub RegistrarPolizas(ByVal numPoliza As String, ByVal rutaArchivo As Stri
 End Sub
 
 '-------------------------------------------
-' Enviar correos automáticos desde Outlook
+' Enviar correos automÃ¡ticos desde Outlook
 '-------------------------------------------
 Public Sub EnviarCorreo(Optional dummy As Boolean)
     On Error GoTo ManejarError
@@ -49,27 +49,27 @@ Public Sub EnviarCorreo(Optional dummy As Boolean)
     Dim nombreCuenta As String, correoGerente As String, ccList As String
     Dim datos() As String, j As Long
 
-    '1?? Validar si hay pólizas registradas
+    '1?? Validar si hay pÃ³lizas registradas
     If contadorPolizas = 0 Then
-        MsgBox "No hay pólizas registradas para enviar.", vbExclamation
+        MsgBox "No hay pÃ³lizas registradas para enviar.", vbExclamation
         Exit Sub
     End If
 
     '2?? Validar integridad de los arreglos
     If Not IsArray(polizasProcesadas) Or Not IsArray(rutasProcesadas) Then
-        MsgBox "Error: los arreglos de pólizas no están inicializados.", vbCritical
+        MsgBox "Error: los arreglos de pÃ³lizas no estÃ¡n inicializados.", vbCritical
         Exit Sub
     End If
     If contadorPolizas > UBound(polizasProcesadas) Then
-        Debug.Print "? Ajustando tamaño de arreglos (contador=" & contadorPolizas & _
-                    ", límite=" & UBound(polizasProcesadas) & ")"
+        Debug.Print "? Ajustando tamaÃ±o de arreglos (contador=" & contadorPolizas & _
+                    ", lÃ­mite=" & UBound(polizasProcesadas) & ")"
         ReDim Preserve polizasProcesadas(1 To contadorPolizas)
         ReDim Preserve rutasProcesadas(1 To contadorPolizas)
     End If
 
     '3?? Cargar la tabla de correos
     If Not HojaExiste(correos, ThisWorkbook) Then
-        MsgBox "No se encontró la hoja '" & correos & "'.", vbCritical
+        MsgBox "No se encontrÃ³ la hoja '" & correos & "'.", vbCritical
         Exit Sub
     End If
 
@@ -103,11 +103,11 @@ Public Sub EnviarCorreo(Optional dummy As Boolean)
         archivo = Trim(rutasProcesadas(i))
         On Error GoTo ManejarError
 
-        Debug.Print "? Procesando póliza índice " & i & " / " & contadorPolizas & ": " & numPoliza
+        Debug.Print "? Procesando pÃ³liza Ã­ndice " & i & " / " & contadorPolizas & ": " & numPoliza
 
         If Len(numPoliza) = 0 Then GoTo siguiente
         If Not idxPoliza.exists(numPoliza) Then
-            Debug.Print "? No se encontró la póliza en tabla de correos: " & numPoliza
+            Debug.Print "? No se encontrÃ³ la pÃ³liza en tabla de correos: " & numPoliza
             GoTo siguiente
         End If
 
@@ -121,7 +121,7 @@ Public Sub EnviarCorreo(Optional dummy As Boolean)
         If UBound(datos) >= 2 Then gerente = Trim(datos(2))
 
         If Len(correoD) = 0 Then
-            Debug.Print "? Sin correo asociado para póliza " & numPoliza
+            Debug.Print "? Sin correo asociado para pÃ³liza " & numPoliza
             GoTo siguiente
         End If
 
@@ -140,7 +140,7 @@ Public Sub EnviarCorreo(Optional dummy As Boolean)
         ' Crear correo
         Set oMail = oApp.CreateItem(0)
 
-        ' Seleccionar cuenta de envío
+        ' Seleccionar cuenta de envÃ­o
         nombreCuenta = "malinallisag.3@gmail.com"
         encontrada = False
         For Each cuenta In oApp.Session.Accounts
@@ -163,16 +163,16 @@ Public Sub EnviarCorreo(Optional dummy As Boolean)
         With oMail
             .To = correoD
             .CC = ccList
-            .Subject = "Propuesta de Renovación"
+            .Subject = "Propuesta de RenovaciÃ³n"
             .Body = "Estimad(a)," & vbCrLf & vbCrLf & _
-                    "Adjunto la propuesta bajo los mismos términos y condiciones para la póliza correspondiente." & vbCrLf & vbCrLf & _
+                    "Adjunto la propuesta bajo los mismos tÃ©rminos y condiciones para la pÃ³liza correspondiente." & vbCrLf & vbCrLf & _
                     "Saludos," & vbCrLf & "Equipo KUROBA"
             If Len(archivo) > 0 Then
                 If Dir(archivo) <> "" Then
                     .Attachments.Add archivo
                     Debug.Print "Adjunto: " & archivo
                 Else
-                    Debug.Print "? No se encontró archivo para adjuntar: " & archivo
+                    Debug.Print "? No se encontrÃ³ archivo para adjuntar: " & archivo
                 End If
             End If
             .Display
@@ -187,7 +187,7 @@ siguiente:
     Exit Sub
 
 ManejarError:
-    Debug.Print "? Error general en índice " & i & " (" & numPoliza & "): " & Err.Description
+    Debug.Print "? Error general en Ã­ndice " & i & " (" & numPoliza & "): " & Err.Description
     MsgBox "Error al enviar correo: " & Err.Description, vbCritical
 End Sub
 
