@@ -21,7 +21,7 @@ El proceso que anteriormente se realizaba de forma manual póliza por póliza se
   -  App (Control de flujo)
   - Configuraciones (Validaciones)
   - Quinquenios (Cálculo de censos)
-  - Correos (Envio de propuestas)
+  - Correo (Envio de propuestas)
 - Hoja de excel
   - TablaCorreos (Repositorio de datos)
 
