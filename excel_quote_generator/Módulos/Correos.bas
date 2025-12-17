@@ -1,4 +1,4 @@
-Attribute VB_Name = "Correo"
+Attribute VB_Name = "Correos"
 '===========================================
 '  Módulo: Envío automático de pólizas por correo
 '  Versión robusta con control de índices y depuración
@@ -201,5 +201,6 @@ Private Function HojaExiste(nombreHoja As String, wb As Workbook) As Boolean
     HojaExiste = Not sh Is Nothing
     On Error GoTo 0
 End Function
+
 
 
