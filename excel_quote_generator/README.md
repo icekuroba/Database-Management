@@ -5,12 +5,13 @@ un cotizador base y un archivo de quinquenios por póliza.
 El proceso que anteriormente se realizaba de forma manual póliza por póliza se transforma en un flujo automático, reduciendo tiempos de ejecución, errores de captura y tareas repetitivas dentro del área administrativa.
 
 ## Funcionalidades
-- Selección de archivos en tiempo de ejecución (cotizador .xlsm y quinquenios .xlsx).
-- Opción de desproteger hojas utilizando una lista de contraseñas conocidas.
+- Selección de archivos en tiempo de ejecución (cotizador `.xlsm` y quinquenios `.xlsx`).
+- Validación de correspondencia entre el archivo de cotizador y el archivo de quinquenios.
 - Búsqueda del quinquenio por nombre de póliza.
-- Ejecución de macros dependientes (subgrupos, Tarifas_enlace, Tarifa_Modificaciones, resumen) cuando están disponibles.
-- Exportación únicamente de las hojas seleccionadas a un archivo .xlsm con marca de tiempo.
+- Ejecución de macros dependientes (`subgrupo`, `Tarifa`, entre otras) cuando están disponibles.
+- Generación de un archivo individual por póliza.
 - Creación automática de la carpeta de salida dentro de Documentos.
+- Restauración automática del entorno de Excel al finalizar el proceso.
 
 ## Estructura del sistema
 - Formularios
@@ -21,25 +22,26 @@ El proceso que anteriormente se realizaba de forma manual póliza por póliza se
   - Configuraciones (Validaciones)
   - Quinquenios (Cálculo de censos)
   - Correo (Envio de propuestas)
-  - Hoja de excel
-    - TablaCorreos (Repositorio de datos)
+- Hoja de excel
+  - TablaCorreos (Repositorio de datos)
 
 ## Requisitos
-- Sistema operativo Windows o IOS
-- Microsoft Excel.
+- Sistema operativo **Windows**.
+- Microsoft Excel para Windows con soporte para VBA.
 - Acceso a:
-  - El libro base de cotización (.xlsm)
-  - El archivo de quinquenios (.xlsx)
-- Macros habilitadas.
+  - Libro base de cotización (`.xlsm`)
+  - Archivo de quinquenios (`.xlsx`)
+- Macros habilitadas en el Centro de confianza.
 
 ## Estructura de los libros
-**Libro de cotización (.xlsm)**  
-- **POLIZAS**: la columna B contiene los nombres de las pólizas.
+### Libro de cotización (`.xlsm`)
+- `POLIZARIO`: la columna **B** contiene los nombres de las pólizas (a partir de la fila 9).
+- `PROPUESTA`: hoja donde se reflejan los resultados del cálculo.
 
-**Libro de quinquenios (.xlsx)**  
-- Sheet1:  
-  - **Columna A **= Nombre de la póliza
-  - **Columna B **= Valor del quinquenio (años)
+### Libro de quinquenios (`.xlsx`)
+- Hoja 1:
+  - Columna **A**: nombre de la póliza.
+  - Columna **B**: valor del quinquenio (años).
 
 ## Uso
 1. Abrir una instancia en blanco de Excel.
@@ -52,12 +54,11 @@ El proceso que anteriormente se realizaba de forma manual póliza por póliza se
 5.La macro creará una carpeta de salida dentro de Documentos y exportará un archivo por cada póliza.
 
 ## Notas
-- Los nombres de las hojas y las celdas destino pueden modificarse en la sección de constantes del módulo.
-- La macro intenta desproteger hojas utilizando un arreglo de contraseñas (vacío por defecto por motivos de seguridad).
--Incluso si ocurre un error durante la ejecución, la configuración de Excel se restaura a su estado original.
+- Los nombres de las hojas y parámetros pueden modificarse desde las constantes del código.
+- En caso de error, el sistema restaura automáticamente la configuración original de Excel.
 
 ## Solución de problemas
-- **"No se encontraron las hojas requeridas"** → verificar los nombres o actualizar las constantes.
-- **"No se generó salida para una póliza"** → la póliza no existe en la columna B o no se encuentra en el archivo de quinquenios.
-- **"No coincide los archivos"**  → Revisar que los archivos seleccionados coincidan
+- **No se encontraron las hojas requeridas** → verificar los nombres de las hojas.
+- **No se generó salida para una póliza** → la póliza no existe en `POLIZARIO` o no se encuentra en el archivo de quinquenios.
+- **Los archivos no coinciden** → revisar que el cotizador y el archivo de quinquenios correspondan al mismo mes y mismo contratante.
 
