@@ -242,7 +242,7 @@ Public Sub BuscarEnArchivo(rutaCotizador As String, rutaQuinquenios As String)
     MsgBox "Todas las polizas fueron procesadas correctamente.", vbInformation
     libroCopia.Close False
     libroQ.Close True
-    Call EnviarCorreo
+    Call EnviarCorreos
     
 Auxiliar:
     On Error Resume Next
@@ -258,5 +258,6 @@ msj:
     MsgBox "Error: " & Err.Description, vbCritical
     Resume Auxiliar
 End Sub
+
 
 
