@@ -44,14 +44,13 @@ El proceso que anteriormente se realizaba de forma manual póliza por póliza se
   - Columna **B**: valor del quinquenio (años).
 
 ## Uso
-1. Abrir una instancia en blanco de Excel.
-2. Presionar ALT+F11, ir a Insertar > Módulo y pegar el código desde Module_Cotizador.bas
-  (nombre del procedimiento: ProcessPoliciesWithQuinquennials).
-3. Guardar el libro de cotización como .xlsm.
-4. Cuando el sistema lo solicite, seleccionar:
+1. Descarga de archivo Select the quote.xlsm
+2. Guardar el arhivo de preferencia en escritorio junto a la carpeta image
+3. Dar doble clic sobre el archivo .xlsm para ejecutarlo y crear un acceso directo
+4. cuando el sistema lo solicite, seleccionar:
   - El archivo cotizador (.xlsm)
   - El archivo de quinquenios (.xlsx)
-5.La macro creará una carpeta de salida dentro de Documentos y exportará un archivo por cada póliza.
+5. El programa creará una carpeta de salida dentro de Documentos y exportará un archivo por cada póliza.
 
 ## Notas
 - Los nombres de las hojas y parámetros pueden modificarse desde las constantes del código.
