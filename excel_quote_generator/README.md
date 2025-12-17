@@ -1,22 +1,22 @@
 # Excel Quote Generator (VBA)
 
-This macro automates batch quote generation from a source workbook (“cotizador”) and a second workbook containing **quinquennial** values per policy.  
-For each policy, it injects the quinquennial value, optionally runs calculation macros, and exports a reduced macro-enabled file with the key sheets.
+Este programa automatiza la generación masiva de cotizaciones a partir de dos libros el primero cotizador y un segundo quinquenios por póliza.
+Donde el proceso de pólizas solia ser manual y la finalidad de este sistema es que sea automatica.
 
-## Features
-- Select source files at runtime (**cotizador** `.xlsm` and **quinquennials** `.xlsx`).
-- Optional unprotect of sheets using a list of known passwords.
-- Lookup of **quinquennial** by **policy name**.
-- Runs dependent macros (`subgrupos`, `Tarifas_enlace`, `Tarifa_Modificaciones`, `resumen`) if present.
-- Exports only selected sheets to a timestamped `.xlsm`.
-- Creates an output folder automatically under `Documents`.
+## Funcionalidades
+- Selección de archivos en tiempo de ejecución (cotizador .xlsm y quinquenios .xlsx).
+- Opción de desproteger hojas utilizando una lista de contraseñas conocidas.
+- Búsqueda del quinquenio por nombre de póliza.
+- Ejecución de macros dependientes (subgrupos, Tarifas_enlace, Tarifa_Modificaciones, resumen) cuando están disponibles.
+- Exportación únicamente de las hojas seleccionadas a un archivo .xlsm con marca de tiempo.
+- Creación automática de la carpeta de salida dentro de Documentos.
 
-## Requirements
-- Microsoft Excel (with macros enabled).
-- Access to:
-  - The source quote workbook (`.xlsm`)
-  - The quinquennials workbook (`.xlsx`)
-- Macros enabled in **Trust Center** settings.
+## Requisitos
+- Microsoft Excel (con macros habilitadas).
+- Acceso a:
+  - El libro base de cotización (.xlsm)
+  - El archivo de quinquenios (.xlsx)
+- Macros habilitadas desde la configuración del Centro de confianza.
 
 ## Workbook Layout
 
