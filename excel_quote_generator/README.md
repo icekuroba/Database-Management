@@ -15,8 +15,8 @@ El proceso que anteriormente se realizaba de forma manual póliza por póliza se
 
 ## Estructura del sistema
 - Formularios
-  - frmCotizador (Interfaz principal)
-  - frmSeleccionarArchivos (Seleccionar archivos)
+  - frmCotizad (Interfaz principal)
+  - frmSeleccionArchivosG (Seleccionar archivos)
 - Módulos
   -  App (Control de flujo)
   - Configuraciones (Validaciones)
