@@ -21,8 +21,8 @@ Private Sub btnAceptar_Click()
     Me.Hide
     Debug.Print Me.TxtCotizador.Value
     Call AppMod.BuscarEnArchivo(Me.TxtCotizador.Value, Me.TxtQuinquenios.Value)
-    'MsgBox "Rutas seleccionadas:" & vbCrLf & "Cotizador:" & Me.txtCotizador.Value & vbCrLf & "Quinquenios:" & Me.txtQuinquenios.Value, vbInformation, "Verificación"
-    'Se enlazara con el módulo principal "AppMódulo"
+    'MsgBox "Rutas seleccionadas:" & vbCrLf & "Cotizador:" & Me.txtCotizador.Value & vbCrLf & "Quinquenios:" & Me.txtQuinquenios.Value, vbInformation, "VerificaciÃ³n"
+    'Se enlazara con el mÃ³dulo principal "AppMÃ³dulo"
 End Sub
 Private Sub btnCancelar_Click()
     Unload Me
