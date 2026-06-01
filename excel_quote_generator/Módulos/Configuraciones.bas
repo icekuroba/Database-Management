@@ -93,7 +93,8 @@ Public Sub Desbloquear(ByVal libroOrigen As Workbook)
     
     hojaIgnorar = Array("CAT", "Cat_Textos")
     desbloqueado = False
-    ruta = "rutaParametros = "https://github.com/icekuroba/Database-Management/blob/e3dc574f28e99cdc605a1f27cb4e0540c9b0b2a0/excel_quote_generator/Archivos_de_prueba/Parametros.xlsx"  'cambiar ruta cuando se guarde el archivo en otra dirección
+     'cambiar ruta cuando se guarde el archivo en otra dirección
+    ruta = "rutaParametros = "https://github.com/icekuroba/Database-Management/blob/e3dc574f28e99cdc605a1f27cb4e0540c9b0b2a0/excel_quote_generator/Archivos_de_prueba/Parametros.xlsx"
         '   Abre libro de contraseña
     Set libroContrasena = Workbooks.Open(ruta, UpdateLinks:=0, ReadOnly:=True)
     Set lista = libroContrasena.Sheets(3)
