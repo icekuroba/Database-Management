@@ -93,7 +93,7 @@ Public Sub Desbloquear(ByVal libroOrigen As Workbook)
     
     hojaIgnorar = Array("CAT", "Cat_Textos")
     desbloqueado = False
-    ruta = "rutaParametros = "C:\Ruta\Demo\Parametros.xlsx"
+    ruta = "rutaParametros = "excel_quote_generator/Archivos_de_prueba/Parametros.xlsx"  'cambiar ruta cuando se guarde el archivo en otra dirección
         '   Abre libro de contraseña
     Set libroContrasena = Workbooks.Open(ruta, UpdateLinks:=0, ReadOnly:=True)
     Set lista = libroContrasena.Sheets(3)
