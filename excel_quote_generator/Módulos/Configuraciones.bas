@@ -93,7 +93,7 @@ Public Sub Desbloquear(ByVal libroOrigen As Workbook)
     
     hojaIgnorar = Array("CAT", "Cat_Textos")
     desbloqueado = False
-    ruta = "https://comunidadunammx.sharepoint.com/:x:/r/sites/KUROBACORPORATION/Proyectos/Cotizador/Parametros.xlsx"
+    ruta = "rutaParametros = "C:\Ruta\Demo\Parametros.xlsx"
         '   Abre libro de contraseña
     Set libroContrasena = Workbooks.Open(ruta, UpdateLinks:=0, ReadOnly:=True)
     Set lista = libroContrasena.Sheets(3)
