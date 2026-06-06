@@ -1,4 +1,13 @@
-# Excel Quote Generator (VBA)
+# Excel Quote Generator / Generador de Cotizaciones (VBA)
+
+> Documentation is mainly written in Spanish because this tool was designed for a Spanish-speaking administrative workflow.
+
+## English Summary
+This VBA project automates the bulk generation of quote files from two Excel workbooks: a base quote workbook and a policy quinquennium file.
+
+The process, previously performed manually policy by policy, is transformed into an automated workflow that reduces execution time, data entry errors, and repetitive administrative tasks.
+
+## Resumen
 Este proyecto automatiza la generación masiva de cotizaciones a partir de dos libros de Excel:
 un cotizador base y un archivo de quinquenios por póliza.
 
@@ -22,7 +31,7 @@ El proceso que anteriormente se realizaba de forma manual, póliza por póliza, 
   - `App` (control de flujo)
   - `Configuraciones` (validaciones)
   - `Quinquenio` (cálculo de censos)
-  - `Correo` (envío de propuestas)
+  - `Correo` (preparación de correos)
 - Hoja de Excel
   - `TablaCorreos` (repositorio de datos)
 
@@ -58,6 +67,7 @@ El proceso que anteriormente se realizaba de forma manual, póliza por póliza, 
 - Los nombres de las hojas y parámetros pueden modificarse desde las constantes del código.
 - Este proyecto funciona como herramienta de apoyo operativo y no sustituye un sistema integral de administración de pólizas.
 - En caso de error, el sistema restaura automáticamente la configuración original de Excel.
+- Los archivos de prueba utilizan datos ficticios o anonimizados.
 
 ## Solución de problemas
 - **No se encontraron las hojas requeridas** → verificar los nombres de las hojas.
