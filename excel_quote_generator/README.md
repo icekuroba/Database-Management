@@ -3,7 +3,7 @@
 > Documentation is mainly written in Spanish because this tool was designed for a Spanish-speaking administrative workflow.
 
 ## English Summary
-This VBA project automates the bulk generation of quote files from two Excel workbooks: a base quote workbook and a policy quinquennium file.
+This VBA project automates the bulk generation of quote files from two Excel workbooks: a base quote workbook and a policy tenure/period file.
 
 The process, previously performed manually policy by policy, is transformed into an automated workflow that reduces execution time, data entry errors, and repetitive administrative tasks.
 
