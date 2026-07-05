@@ -1,7 +1,5 @@
 # Database Management
 
-## Overview
-
 This repository contains database, automation, and data workflow projects focused on SQL, Excel automation, VBA, Office Scripts, JavaScript, Power BI, and operational process improvement.
 
 The goal is to document practical tools that automate repetitive tasks, organize information, process business data, and support administrative or analytical workflows.
